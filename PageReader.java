@@ -4,10 +4,30 @@
  */
 package spambot;
 
+import java.util.Set;
+
 /**
  *
  * @author tnealo01
  */
-public class PageReader {
+public class PageReader implements WebPage {
+    
+    private static int maxLinks = 50;
+    private String url;
+    
+    public PageReader(String url) {
+        
+    }
+            
+    public String getUrl() {
+        return "filler";
+    }
+    
+    public Set<String> getLinks() {
+        
+    }
+    
+    
+    
     
 }
