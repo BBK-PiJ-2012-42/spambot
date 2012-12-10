@@ -18,7 +18,7 @@ public class Spambot {
     }
     
     private void launch() {
-        
+        new Manager();
     }
         
 }
