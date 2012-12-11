@@ -86,7 +86,7 @@ public class Crawler {
 		*/
             
                 //subLinkSet = new HashSet<>();
-                subLinkSet.add("http://www.oxford-estates.co.uk/");
+                subLinkSet.add("https://sites.google.com/site/r3dt3ddy23/Home/dash");
                 this.addLinks(subLinkSet);
                 
 		Iterator<String> iterator = links.iterator();
@@ -98,7 +98,12 @@ public class Crawler {
 			addEmails(pageReader.getEmails()); 
 			addLinks(pageReader.getLinks());
 			addToVisitedSet(nextUrl);
-		}	
+		}
+                
+                Iterator<String> emailIterator = emails.iterator();
+                while (emailIterator.hasNext()) {
+                    System.out.println(emailIterator.next());
+                }
 			
 	}
 }

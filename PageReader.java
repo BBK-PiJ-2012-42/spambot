@@ -118,7 +118,7 @@ public class PageReader implements WebPage {
                     result = myScanner.findInLine(mailRegex);
                     if (result != null) {
                         emails.add(result);
-                        System.out.println(result);
+                        //System.out.println(result);
                     }
                 } while(result != null);
             } catch (NullPointerException e) {
