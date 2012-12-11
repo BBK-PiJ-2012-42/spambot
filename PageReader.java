@@ -4,8 +4,11 @@
  */
 package spambot;
 
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -18,15 +21,24 @@ public class PageReader implements WebPage {
     private String url;
     // Current list of lines from the webpage.
     private List<String> pageLines = new ArrayList<>();
+    static private int counter;
+    
+    
+    public static int getCount() {
+        return counter;
+    }
     
     public PageReader(String url) {
         this.url = url;
+        counter += 1;
     }
             
+    @Override
     public String getUrl() {
         return url;
     }
     
+    @Override
     public Set<String> getLinks() {
         if (pageLines.isEmpty()) {
             pageLines = getPage();
@@ -35,6 +47,7 @@ public class PageReader implements WebPage {
         return myLinkSet;
     }
     
+    @Override
     public Set<String> getEmails() {
         if (pageLines.isEmpty()) {
             pageLines = getPage();

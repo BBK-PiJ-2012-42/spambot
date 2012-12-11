@@ -9,10 +9,10 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class Crawler {
-	private Set<String> links = HashSet<String>;
-	private Set<String> visitedLinks = null;
-	private Set<String> emails = null;
-	private Set<String> subLinkSet = null; //for testing purposes
+	private Set<String> links = new HashSet<>();
+	private Set<String> visitedLinks = new HashSet<>();
+	private Set<String> emails = new HashSet<>();
+	private Set<String> subLinkSet = new HashSet<>(); //for testing purposes
 	
 	public Crawler(String url) { //adds seed website upon construction of crawler.
 		links = new HashSet<>();
@@ -85,8 +85,8 @@ public class Crawler {
 		* while the set of links isn't empty and the number of sites visited is less than 51.
 		*/
             
-                subLinkSet = new HashSet<>();
-                subLinkSet.add("http://www.dcs.bbk.ac.uk/dcswiki/index.php/Main_Page");
+                //subLinkSet = new HashSet<>();
+                subLinkSet.add("http://www.oxford-estates.co.uk/");
                 this.addLinks(subLinkSet);
                 
 		Iterator<String> iterator = links.iterator();
