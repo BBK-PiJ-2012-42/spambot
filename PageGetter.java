@@ -49,8 +49,6 @@ public class PageGetter {
     public List<String> getLinks(List<String> lines) {
         String result;
         List<String> links = new ArrayList<>();
-        Pattern htmltag = Pattern.compile("<a\\b[^>]*href=\"[^>]*>(.*?)</a>");
-        Pattern link = Pattern.compile("href=\"[^>]*\">");
         String linkRegex = "href=\"[^>]*\">";
         for(String each : lines) {
             try {
@@ -61,7 +59,7 @@ public class PageGetter {
                         // Remove the beginning and end href=""
                         result = result.replaceFirst("href=\"", "");
                         result = result.replaceFirst("\">*", "");
-                        // Remove any thing left over after a space.
+                        // Remove anything left over after a space.
                         result = result.replaceFirst(" .*", "");
                         // Still does not append http://domain to the links without it.
                         links.add(result);
@@ -76,5 +74,9 @@ public class PageGetter {
         return links;        
     }
     
+    public List<String> getEmails(List<String> lines) {
+        List<String> emails = new ArrayList<>();
+        return emails;
+    }
     
 }
