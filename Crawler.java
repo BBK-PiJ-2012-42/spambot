@@ -100,6 +100,8 @@ public class Crawler {
 			addToVisitedSet(nextUrl);
 		}
                 
+                
+                System.out.println("Gathered emails");
                 Iterator<String> emailIterator = emails.iterator();
                 while (emailIterator.hasNext()) {
                     System.out.println(emailIterator.next());
