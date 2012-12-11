@@ -4,6 +4,8 @@
  */
 package spambot;
 
+import java.util.Set;
+
 /**
  *
  * @author tnealo01
@@ -18,7 +20,9 @@ public class Spambot {
     }
     
     private void launch() {
-        new Manager();
+        //new Manager();
+        PageReader myReader = new PageReader("http://www.dcs.bbk.ac.uk/~nigel/");
+        Set<String> mySet = myReader.getLinks();
     }
         
 }
