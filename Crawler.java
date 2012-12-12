@@ -4,48 +4,44 @@
  */
 package spambot;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class Crawler implements Runnable {
-	private Set<String> links;
-	private Set<String> visitedLinks;
-	private Set<String> emails;
+//	private Set<String> links;
+//	private Set<String> visitedLinks;
+//	private Set<String> emails;
+        private static Set<String> links = new HashSet<>();
+        private static Set<String> visitedLinks = new HashSet<>();
+        private static Set<String> emails = new HashSet<>();
         private String urlSeed;
-        private int threadNo;
+        private static final int threads = 3;
         private Manager parent;
         
-        public boolean closed = false;
         
 	private Set<String> subLinkSet = new HashSet<>(); //for testing purposes
 	
-	public Crawler(Set<String> links,
-            Set<String> visitedLinks,
-            Set<String> emails,
-            String url,
-            int threadNo) { //adds seed website upon construction of crawler.
-                this.links = links;
-                this.visitedLinks = visitedLinks;
-                this.emails = emails;
+	public Crawler(String url) { //adds seed website upon construction of crawler.
                 this.urlSeed = url;
-                this.threadNo = threadNo;
                 links.add(urlSeed);
                 
                 //this.run();
 	}
         
-	public Crawler(Set<String> links,
-            Set<String> visitedLinks,
-            Set<String> emails,
-            int threadNo) { //adds seed website upon construction of crawler.
-                this.links = links;
-                this.visitedLinks = visitedLinks;
-                this.emails = emails;
+//	public Crawler(Set<String> links,
+//            Set<String> visitedLinks,
+//            Set<String> emails,
+//            int threadNo) { //adds seed website upon construction of crawler.
+//                this.links = links;
+//                this.visitedLinks = visitedLinks;
+//                this.emails = emails;
   
-                this.threadNo = threadNo;
+                //this.threadNo = threadNo;
                 //this.run();
-	}
+	//}
 	
 	
 	
@@ -69,7 +65,7 @@ public class Crawler implements Runnable {
 //	}
 	
 	
-	private synchronized void addEmails(Set<String> subEmailSet) {
+	private void addEmails(Set<String> subEmailSet) {
             emails.addAll(subEmailSet);
 	}
 	
@@ -104,16 +100,23 @@ public class Crawler implements Runnable {
     }
     
     public void startThreads() {
-        
+        List<Thread> threadList = new ArrayList<>();
+        for (int i = 1; i < threads; i++) {
+            threadList.add(new Thread(new Crawler(urlSeed)));
+        }
+        for (Thread i : threadList) {
+            i.start();
+        }
     }
+    
+
         
-    @Override
     public void run() {
-            System.out.println("Thread: "+ threadNo+ " running!");
+            //System.out.println("Thread: "+threadNo+ " running!");
             Iterator<String> iterator = links.iterator(); //at this point iterator only has bbk.ac.uk, hence it gets reassigned at end of loop to include updated links.
             while (iterator.hasNext() && PageReader.getCount() <= 500 && emails.size() <= 10) {		
                 String element = iterator.next();
-                System.out.println("Thread: "+ threadNo+ " ::: "+element); //test print
+                System.out.println(element); //test print
                 PageReader testReader = new PageReader(element);	
                 addEmails(testReader.getEmails());      
                 Manager.addLinks(testReader.getLinks(), element);

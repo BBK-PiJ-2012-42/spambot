@@ -19,11 +19,13 @@ public class Manager {
     private static Set<String> visitedLinks = new HashSet<>();
     private static Set<String> emails = new HashSet<>();
     
-    private String seed = "http://www.dcs.bbk.ac.uk/dcswiki/index.php/Main_Page";
+    private static String seed = "http://www.dcs.bbk.ac.uk/dcswiki/index.php/Main_Page";
     
     public static void main(String[] args) {
         Manager myManager = new Manager();
-        myManager.spawnCrawlers(2);
+        //myManager.spawnCrawlers(2);
+        Crawler myCrawler = new Crawler(seed);
+        myCrawler.startThreads();
         
 
     }
@@ -60,22 +62,22 @@ public class Manager {
         visitedLinks.add(url);
     }
     
-    public void spawnCrawlers(int threadCount) {
-        List<Thread> threadList = new ArrayList<>();
-        threadList.add(new Thread(new Crawler(links, visitedLinks, emails, seed, 0)));
-        for (int i = 1; i < threadCount; i++) {
-            threadList.add(new Thread(new Crawler(links, visitedLinks, emails, i)));
-        }
-        
-        
-        
-        for (Thread i : threadList) {
-            i.start();
-        }
-        
-        printEmails();
-        
-}
+//    public void spawnCrawlers(int threadCount) {
+//        List<Thread> threadList = new ArrayList<>();
+//        threadList.add(new Thread(new Crawler(links, visitedLinks, emails, seed, 0)));
+//        for (int i = 1; i < threadCount; i++) {
+//            threadList.add(new Thread(new Crawler(links, visitedLinks, emails, i)));
+//        }
+//        
+//        
+//        
+//        for (Thread i : threadList) {
+//            i.start();
+//        }
+//        
+//        printEmails();
+//        
+//}
         
 //        new Thread(new Crawler(links, visitedLinks, emails, seed, 0)).start();
 //        new Thread(new Crawler(links, visitedLinks, emails, 1)).start();
