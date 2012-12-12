@@ -14,6 +14,9 @@ public class Crawler implements Runnable {
 	private Set<String> emails;
         private String urlSeed;
         private int threadNo;
+        private Manager parent;
+        
+        public boolean closed = false;
         
 	private Set<String> subLinkSet = new HashSet<>(); //for testing purposes
 	
@@ -28,6 +31,7 @@ public class Crawler implements Runnable {
                 this.urlSeed = url;
                 this.threadNo = threadNo;
                 links.add(urlSeed);
+                
                 //this.run();
 	}
         
@@ -38,38 +42,40 @@ public class Crawler implements Runnable {
                 this.links = links;
                 this.visitedLinks = visitedLinks;
                 this.emails = emails;
+  
                 this.threadNo = threadNo;
                 //this.run();
 	}
 	
 	
 	
-	private synchronized void addLinks(Set<String> linkSubSet, String element) {
-                Set<String> removeSet = new HashSet<>();
-		if (!visitedLinks.isEmpty()) {
-			Iterator<String> itr = linkSubSet.iterator();
-			while (itr.hasNext()) {
-                                String currentLink = itr.next();
-				if (visitedLinks.contains(currentLink)) {
-                                        removeSet.add(currentLink);
-				}
-			}
-                        linkSubSet.removeAll(removeSet);
-                        
-		}		
-                links.addAll(linkSubSet);
-                addToVisitedSet(element);
-		
-	}
+//	private synchronized void addLinks(Set<String> linkSubSet, String element) {
+//                Set<String> removeSet = new HashSet<>();
+//		if (!visitedLinks.isEmpty()) {
+//			Iterator<String> itr = linkSubSet.iterator();
+//			while (itr.hasNext()) {
+//                                String currentLink = itr.next();
+//				if (visitedLinks.contains(currentLink)) {
+//                                        removeSet.add(currentLink);
+//				}
+//			}
+//                        linkSubSet.removeAll(removeSet);
+//                        
+//		}		
+//                links.addAll(linkSubSet);
+//                addToVisitedSet(element);
+//                links.remove(element);
+//		
+//	}
 	
 	
 	private synchronized void addEmails(Set<String> subEmailSet) {
             emails.addAll(subEmailSet);
 	}
 	
-	private synchronized void addToVisitedSet(String url) {
-            visitedLinks.add(url);
-	}			
+//	private synchronized void addToVisitedSet(String url) {
+//            visitedLinks.add(url);
+//	}			
 			
         private synchronized void printVisited() {
         Iterator itr = visitedLinks.iterator();
@@ -79,13 +85,6 @@ public class Crawler implements Runnable {
         }
         }
 
-        private synchronized void printEmails() {
-        Iterator itr = emails.iterator();
-        System.out.println("EMAILS");
-        while (itr.hasNext()) {
-        System.out.println(itr.next());
-        }
-        }
 
         private synchronized void printLinks() {
         Iterator itr = links.iterator();
@@ -94,6 +93,19 @@ public class Crawler implements Runnable {
         System.out.println(itr.next());
         }
         }
+        
+    public void printEmails() {
+        System.out.println();
+        System.out.println("Gathered emails");
+        Iterator<String> emailIterator = emails.iterator();
+        while (emailIterator.hasNext()) {
+            System.out.println(emailIterator.next());
+        }        
+    }
+    
+    public void startThreads() {
+        
+    }
         
     @Override
     public void run() {
@@ -104,11 +116,13 @@ public class Crawler implements Runnable {
                 System.out.println("Thread: "+ threadNo+ " ::: "+element); //test print
                 PageReader testReader = new PageReader(element);	
                 addEmails(testReader.getEmails());      
-                addLinks(testReader.getLinks(), element);
+                Manager.addLinks(testReader.getLinks(), element);
                 //addToVisitedSet(element);
-                links.remove(element);
+                //links.remove(element);
                 iterator = links.iterator();
+                
             }
+            printEmails();
 
 
 

@@ -19,12 +19,12 @@ public class Manager {
     private static Set<String> visitedLinks = new HashSet<>();
     private static Set<String> emails = new HashSet<>();
     
-    private String seed = "http://www.dcs.bbk.ac.uk";
+    private String seed = "http://www.dcs.bbk.ac.uk/dcswiki/index.php/Main_Page";
     
     public static void main(String[] args) {
         Manager myManager = new Manager();
-        myManager.spawnCrawlers(4);
-        printEmails();
+        myManager.spawnCrawlers(2);
+        
 
     }
     
@@ -35,6 +35,29 @@ public class Manager {
         while (emailIterator.hasNext()) {
             System.out.println(emailIterator.next());
         }        
+    }
+    
+    
+    public static synchronized void addLinks(Set<String> linkSubSet, String element) {
+            Set<String> removeSet = new HashSet<>();
+            if (!visitedLinks.isEmpty()) {
+                    Iterator<String> itr = linkSubSet.iterator();
+                    while (itr.hasNext()) {
+                            String currentLink = itr.next();
+                            if (visitedLinks.contains(currentLink)) {
+                                    removeSet.add(currentLink);
+                            }
+                    }
+                    linkSubSet.removeAll(removeSet);
+
+            }		
+            links.addAll(linkSubSet);
+            addToVisitedSet(element);
+            links.remove(element);
+    }
+    
+    public static synchronized void addToVisitedSet(String url) {
+        visitedLinks.add(url);
     }
     
     public void spawnCrawlers(int threadCount) {
@@ -50,10 +73,14 @@ public class Manager {
             i.start();
         }
         
+        printEmails();
+        
+}
+        
 //        new Thread(new Crawler(links, visitedLinks, emails, seed, 0)).start();
 //        new Thread(new Crawler(links, visitedLinks, emails, 1)).start();
                 
     }
     
     
-}
+
