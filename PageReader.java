@@ -44,6 +44,13 @@ public class PageReader implements WebPage {
             pageLines = getPage();
         } 
         Set<String> myLinkSet = new HashSet<>(getListLinks(pageLines));
+        ///////
+        System.out.println();
+        //System.out.println("Gathered emails");
+//        Iterator<String> emailIterator = myLinkSet.iterator();
+//        while (emailIterator.hasNext()) {
+//            System.out.println("Checking:::: " + emailIterator.next());
+//        }
         return myLinkSet;
     }
     
@@ -95,8 +102,10 @@ public class PageReader implements WebPage {
                         result = result.replaceFirst("&amp.*", "");
                         // Still does not append http://domain to the links without it or
                         // pass over emailto: and javascript: links.
-                        links.add(result);
-                        System.out.println(result);
+                        if (result.startsWith("https://") || result.startsWith("http://") || result.startsWith("www.")) {
+                            links.add(result);
+                            //System.out.println(result);
+                        }
                     }
                 } while(result != null);
             } catch (NullPointerException e) {

@@ -21,8 +21,9 @@ public class Spambot {
     
     private void launch() {
         //new Manager();
-        PageReader myReader = new PageReader("http://www.dcs.bbk.ac.uk/~nigel/");
-        Set<String> mySet = myReader.getLinks();
+        Crawler myCrawler = new Crawler("https://sites.google.com/site/r3dt3ddy23/Home/dash");
+//        PageReader myReader = new PageReader("http://www.dcs.bbk.ac.uk/~nigel/");
+//        Set<String> mySet = myReader.getLinks();
     }
         
 }

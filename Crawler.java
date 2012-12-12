@@ -25,17 +25,20 @@ public class Crawler {
 	
 	
 	private void addLinks(Set<String> linkSubSet) {
+                Set<String> removeSet = new HashSet<>();
 		if (!visitedLinks.isEmpty()) {
 			Iterator<String> itr = linkSubSet.iterator();
 			while (itr.hasNext()) {
-				if (visitedLinks.contains(itr.next())) {
-					linkSubSet.remove(itr.next());
+                                String currentLink = itr.next();
+				if (visitedLinks.contains(currentLink)) {
+                                        removeSet.add(currentLink);
 				}
 			}
-		}
-		else {			
-			links.addAll(subLinkSet);
-		}
+                        linkSubSet.removeAll(removeSet);
+                        
+		}		
+                links.addAll(linkSubSet);
+		
 	}
 	
 	
@@ -67,7 +70,32 @@ public class Crawler {
 		Crawler crawler = new Crawler();
 		crawler.launch();
 	}
-	
+
+
+        private synchronized void printVisited() {
+        Iterator itr = visitedLinks.iterator();
+        System.out.println("VISITED");
+        while (itr.hasNext()) {
+        System.out.println(itr.next());
+        }
+        }
+
+        private synchronized void printEmails() {
+        Iterator itr = emails.iterator();
+        System.out.println("EMAILS");
+        while (itr.hasNext()) {
+        System.out.println(itr.next());
+        }
+        }
+
+        private synchronized void printLinks() {
+        Iterator itr = links.iterator();
+        System.out.println("LINKS");
+        while (itr.hasNext()) {
+        System.out.println(itr.next());
+        }
+        }
+        
 	private void launch() {
 	
 		/**
@@ -86,21 +114,49 @@ public class Crawler {
 		*/
             
                 //subLinkSet = new HashSet<>();
-                subLinkSet.add("https://sites.google.com/site/r3dt3ddy23/Home/dash");
+                //subLinkSet.add("https://sites.google.com/site/r3dt3ddy23/Home/dash");
+                subLinkSet.add("http://news.bbc.co.uk");
                 this.addLinks(subLinkSet);
                 
-		Iterator<String> iterator = links.iterator();
-                String nextUrl;
-		while (iterator.hasNext() && PageReader.getCount() <= 50) {	
-                        nextUrl = iterator.next();
-			System.out.println(nextUrl); //test print
-			PageReader pageReader = new PageReader(nextUrl);			
-			addEmails(pageReader.getEmails()); 
-			addLinks(pageReader.getLinks());
-			addToVisitedSet(nextUrl);
-		}
                 
                 
+//		Iterator<String> linkIterator = links.iterator();
+//                String nextUrl;
+//		while (linkIterator.hasNext() && PageReader.getCount() <= 50) {	
+//                        nextUrl = linkIterator.next();
+//			System.out.println(nextUrl); //test print
+//			PageReader pageReader = new PageReader(nextUrl);			
+//			addEmails(pageReader.getEmails()); 
+//			addLinks(pageReader.getLinks());
+//			addToVisitedSet(nextUrl);
+//                        linkIterator = links.iterator();
+//		}
+                
+                Iterator<String> iterator = links.iterator(); //at this point iterator only has bbk.ac.uk, hence it gets reassigned at end of loop to include updated links.
+                while (iterator.hasNext() && PageReader.getCount() <= 50 && emails.size() <= 5) {	
+                //while (iterator.hasNext()) {	
+                    String element = iterator.next();
+                    System.out.println(element); //test print
+                    PageReader testReader = new PageReader(element);	
+                    addEmails(testReader.getEmails());
+//                    
+//                    Iterator<String> emailIterator = testReader.getLinks().iterator();
+//                    while (emailIterator.hasNext()) {
+//                        System.out.println("Checking:::: " + emailIterator.next());
+//                    }
+                    
+                            
+                            
+                    addLinks(testReader.getLinks());
+                    addToVisitedSet(element);
+//                    this.printEmails();
+                    //this.printLinks();
+//                    this.printVisited();
+                    links.remove(element);
+                    iterator = links.iterator();
+                }
+                
+                System.out.println();
                 System.out.println("Gathered emails");
                 Iterator<String> emailIterator = emails.iterator();
                 while (emailIterator.hasNext()) {
